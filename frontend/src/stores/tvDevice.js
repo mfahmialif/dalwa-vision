@@ -5,6 +5,7 @@ import api from '../axios'
 export const useTvDeviceStore = defineStore('tvDevice', () => {
   const devices = ref([])
   const stats = ref({ total: 0, online: 0, offline: 0, setup: 0, warning: 0 })
+  const globalBanner = ref(null)
   const loading = ref(false)
   const currentPage = ref(1)
   const totalPages = ref(1)
@@ -16,6 +17,7 @@ export const useTvDeviceStore = defineStore('tvDevice', () => {
       devices.value = data.data || []
       currentPage.value = data.current_page || 1
       totalPages.value = data.last_page || 1
+      globalBanner.value = data.global_banner || null
     } catch (e) { console.error(e); devices.value = [] } finally { loading.value = false }
   }
 
@@ -45,5 +47,5 @@ export const useTvDeviceStore = defineStore('tvDevice', () => {
     return data
   }
 
-  return { devices, stats, loading, currentPage, totalPages, fetchDevices, fetchStats, createDevice, updateDevice, deleteDevice, regenerateToken }
+  return { devices, stats, globalBanner, loading, currentPage, totalPages, fetchDevices, fetchStats, createDevice, updateDevice, deleteDevice, regenerateToken }
 })

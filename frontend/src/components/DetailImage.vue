@@ -71,12 +71,13 @@ defineProps({
   hasNext: { type: Boolean, default: false },
 })
 
-defineEmits(['close', 'prev', 'next'])
+const emit = defineEmits(['close', 'prev', 'next', 'toggleUI'])
 
 const showInfo = ref(true)
 
 function toggleInfo() {
   showInfo.value = !showInfo.value
+  emit('toggleUI', showInfo.value)
 }
 </script>
 

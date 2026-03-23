@@ -10,6 +10,7 @@ use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\TvDeviceController;
+use App\Http\Controllers\TvCommandController;
 use Illuminate\Support\Facades\Route;
 
 // ── Public routes ──
@@ -41,9 +42,13 @@ Route::get('/announcements', [AnnouncementController::class, 'index']);
 Route::get('/announcements/stats', [AnnouncementController::class, 'stats']);
 Route::get('/announcements/{announcement}', [AnnouncementController::class, 'show']);
 
-// TV Device (public — connect + heartbeat)
+// TV Device (public — connect + heartbeat + disconnect)
 Route::post('/tv/connect', [TvDeviceController::class, 'connect']);
 Route::post('/tv/heartbeat', [TvDeviceController::class, 'heartbeat']);
+Route::post('/tv/disconnect', [TvDeviceController::class, 'disconnect']);
+
+// Active banner (public — for TV display on load)
+Route::get('/tv-commands/active-banner', [TvCommandController::class, 'activeBanner']);
 
 // ── Protected routes (requires Sanctum token) ──
 Route::middleware('auth:sanctum')->group(function () {
@@ -95,4 +100,19 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/tv-devices/{tvDevice}', [TvDeviceController::class, 'update']);
     Route::delete('/tv-devices/{tvDevice}', [TvDeviceController::class, 'destroy']);
     Route::post('/tv-devices/{tvDevice}/regenerate-token', [TvDeviceController::class, 'regenerateToken']);
+    Route::post('/tv-devices/{tvDevice}/force-disconnect', [TvDeviceController::class, 'forceDisconnect']);
+    Route::get('/tv-devices/{tvDevice}/current-page', [TvDeviceController::class, 'currentPage']);
+
+    // TV Commands (Control Center)
+    Route::post('/tv-commands/push', [TvCommandController::class, 'push']);
+    Route::post('/tv-commands/broadcast', [TvCommandController::class, 'broadcast']);
+    Route::post('/tv-commands/reload', [TvCommandController::class, 'reload']);
+    Route::post('/tv-commands/home', [TvCommandController::class, 'home']);
+    Route::post('/tv-commands/banner', [TvCommandController::class, 'banner']);
+    Route::post('/tv-commands/targeted-banner', [TvCommandController::class, 'targetedBanner']);
+    Route::get('/tv-commands/targeted-banners', [TvCommandController::class, 'targetedBanners']);
+    Route::get('/tv-commands/all-active-banners', [TvCommandController::class, 'allActiveBanners']);
+    Route::put('/tv-commands/active-banners/{id}', [TvCommandController::class, 'updateBanner']);
+    Route::delete('/tv-commands/active-banners/{id}', [TvCommandController::class, 'deleteBanner']);
+    Route::get('/tv-commands/logs', [TvCommandController::class, 'logs']);
 });

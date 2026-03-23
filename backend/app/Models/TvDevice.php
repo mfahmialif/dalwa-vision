@@ -10,7 +10,7 @@ class TvDevice extends Model
     protected $fillable = [
         'name', 'location', 'orientation', 'token', 'status',
         'ip_address', 'last_heartbeat', 'firmware_version',
-        'warning_message', 'registered_by',
+        'warning_message', 'current_page', 'registered_by',
     ];
 
     protected $casts = [
@@ -20,6 +20,11 @@ class TvDevice extends Model
     public function registeredBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'registered_by');
+    }
+
+    public function activeBanner(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(\App\Models\ActiveBanner::class);
     }
 
     /**

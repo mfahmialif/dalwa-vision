@@ -127,7 +127,7 @@ const props = defineProps({
   hasNext: { type: Boolean, default: false },
 })
 
-const emit = defineEmits(['close', 'prev', 'next'])
+const emit = defineEmits(['close', 'prev', 'next', 'toggleUI'])
 
 const videoEl = ref(null)
 const isPlaying = ref(false)
@@ -199,9 +199,10 @@ function seekTo(e) {
 
 function showControlsBriefly() {
   showControls.value = true
+  emit('toggleUI', true)
   clearTimeout(controlsTimeout)
   if (isPlaying.value) {
-    controlsTimeout = setTimeout(() => { showControls.value = false }, 3000)
+    controlsTimeout = setTimeout(() => { showControls.value = false; emit('toggleUI', false) }, 3000)
   }
 }
 
