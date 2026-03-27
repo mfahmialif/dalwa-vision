@@ -29,46 +29,46 @@
     </header>
 
     <!-- ═══════ MAIN CONTENT ═══════ -->
-    <main class="flex flex-col md:flex-row portrait:flex-col overflow-hidden p-3 md:p-6 gap-4 md:gap-6 relative" style="height: calc(100vh - 56px - 40px)">
+    <main class="flex flex-col md:flex-row portrait:flex-col overflow-hidden p-2 md:p-6 gap-3 md:gap-6 relative" style="height: calc(100vh - 56px - 40px)">
 
       <!-- ═══ LEFT: CALENDAR GRID (70%) ═══ -->
       <section class="flex-[0.7] flex flex-col gap-4 h-full">
         <!-- Calendar Header -->
-        <div class="glass-panel rounded-2xl p-5 flex items-center justify-between">
+        <div class="glass-panel rounded-2xl p-3 md:p-5 flex items-center justify-between">
           <div>
-            <h2 class="text-3xl font-bold text-white tracking-tight">{{ monthYearDisplay }}</h2>
-            <p class="text-accent text-base font-medium mt-1">{{ hijriMonthDisplay }}</p>
+            <h2 class="text-xl md:text-3xl font-bold text-white tracking-tight">{{ monthYearDisplay }}</h2>
+            <p class="text-accent text-sm md:text-base font-medium mt-1">{{ hijriMonthDisplay }}</p>
           </div>
           <div class="flex gap-2">
-            <button @click="prevMonth" class="size-10 rounded-xl bg-white/5 hover:bg-white/10 flex items-center justify-center text-white transition-colors border border-white/5">
+            <button @click="prevMonth" class="size-8 md:size-10 rounded-xl bg-white/5 hover:bg-white/10 flex items-center justify-center text-white transition-colors border border-white/5">
               <span class="material-symbols-outlined">chevron_left</span>
             </button>
-            <button @click="nextMonth" class="size-10 rounded-xl bg-white/5 hover:bg-white/10 flex items-center justify-center text-white transition-colors border border-white/5">
+            <button @click="nextMonth" class="size-8 md:size-10 rounded-xl bg-white/5 hover:bg-white/10 flex items-center justify-center text-white transition-colors border border-white/5">
               <span class="material-symbols-outlined">chevron_right</span>
             </button>
           </div>
         </div>
 
         <!-- Calendar Grid -->
-        <div class="glass-panel rounded-2xl flex-1 p-5 flex flex-col">
+        <div class="glass-panel rounded-2xl flex-1 p-2 md:p-5 flex flex-col">
           <!-- Days Header -->
           <div class="grid grid-cols-7 mb-3 border-b border-white/10 pb-3">
             <div v-for="d in dayHeaders" :key="d.name"
-                 :class="['text-center font-bold text-sm tracking-wider uppercase', d.isJumat ? 'text-accent' : 'text-slate-400']">
+                 :class="['text-center font-bold text-[10px] md:text-sm tracking-wider uppercase', d.isJumat ? 'text-accent' : 'text-slate-400']">
               {{ d.name }}
             </div>
           </div>
           <!-- Days Grid -->
-          <div class="grid grid-cols-7 gap-2 flex-1" style="grid-auto-rows: 1fr">
+          <div class="grid grid-cols-7 gap-1 md:gap-2 flex-1" style="grid-auto-rows: 1fr">
             <div v-for="(cell, ci) in calendarCells" :key="ci"
                  @click="cell.day && cell.isCurrentMonth ? selectDate(cell.day) : null"
                  :class="[
-                   'relative p-2 rounded-xl flex flex-col items-start justify-start transition-all duration-300',
+                   'relative p-1 md:p-2 rounded-lg md:rounded-xl flex flex-col items-start justify-start transition-all duration-300',
                    !cell.isCurrentMonth ? 'text-slate-600' : '',
                    cell.isCurrentMonth && !cell.isSelected ? 'bg-[#0b1711]/40 hover:bg-[#0b1711]/60 text-white border border-white/5 cursor-pointer' : '',
                    cell.isSelected ? 'calendar-cell-active text-white cursor-pointer' : ''
                  ]">
-              <span :class="['font-bold', cell.isSelected ? 'text-xl text-accent' : 'text-base']">{{ cell.day || '' }}</span>
+              <span :class="['font-bold', cell.isSelected ? 'text-sm md:text-xl text-accent' : 'text-xs md:text-base']">{{ cell.day || '' }}</span>
               <!-- Event dots -->
               <div v-if="cell.events && cell.events.length" class="flex gap-1 mt-1">
                 <div v-for="(ev, ei) in cell.events.slice(0, 3)" :key="ei"
@@ -86,7 +86,7 @@
       </section>
 
       <!-- ═══ RIGHT: EVENTS PANEL (30%) ═══ -->
-      <aside class="flex-[0.3] flex flex-col h-full gap-4">
+      <aside class="flex-[0.3] min-h-[200px] md:min-h-0 flex flex-col h-full gap-4">
         <div class="events-panel h-full rounded-2xl flex flex-col overflow-hidden">
 
           <!-- ─── Selected Date Events ─── -->

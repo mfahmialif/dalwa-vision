@@ -9,19 +9,19 @@
     <div class="fixed inset-0 z-0 bg-[radial-gradient(circle_at_top_right,rgba(59,130,246,0.2),transparent_60%)] pointer-events-none"></div>
 
     <!-- ═══════ MAIN CONTENT ═══════ -->
-    <div class="relative z-10 flex flex-col h-screen p-4 lg:p-6">
+    <div class="relative z-10 flex flex-col h-screen p-3 md:p-4 lg:p-6">
 
       <!-- ═══════ HEADER ═══════ -->
-      <header class="flex items-center justify-between mb-3 pb-2 border-b border-white/5">
-        <div class="flex items-center gap-4">
-          <div class="glass-panel flex items-center justify-center size-14 rounded-xl border border-accent/30 shadow-[0_0_20px_rgba(251,191,36,0.15)]">
-            <span class="material-symbols-outlined text-3xl text-accent">mosque</span>
+      <header class="flex flex-wrap items-center justify-between mb-2 md:mb-3 pb-2 border-b border-white/5 gap-2">
+        <div class="flex items-center gap-2 md:gap-4">
+          <div class="glass-panel flex items-center justify-center size-9 md:size-14 rounded-lg md:rounded-xl border border-accent/30 shadow-[0_0_20px_rgba(251,191,36,0.15)]">
+            <span class="material-symbols-outlined text-xl md:text-3xl text-accent">mosque</span>
           </div>
           <div>
-            <h1 class="text-3xl font-serif font-bold tracking-tight text-white drop-shadow-lg">Dalwa Vision</h1>
+            <h1 class="text-lg md:text-3xl font-serif font-bold tracking-tight text-white drop-shadow-lg">Dalwa Vision</h1>
             <div class="flex items-center gap-2">
-              <span class="h-px w-6 bg-accent/60"></span>
-              <p class="text-accent/90 text-xs font-medium tracking-[0.2em] uppercase">TV Interaktif Pesantren</p>
+              <span class="h-px w-4 md:w-6 bg-accent/60"></span>
+              <p class="text-accent/90 text-[10px] md:text-xs font-medium tracking-[0.2em] uppercase">TV Interaktif Pesantren</p>
             </div>
           </div>
         </div>
@@ -49,15 +49,15 @@
           </Transition>
         </div>
 
-        <div class="flex items-center gap-4">
+        <div class="flex items-center gap-2 md:gap-4">
           <div class="self-end">
-            <div class="flex items-center gap-3 text-sm font-light text-slate-200 glass-panel px-4 py-1.5 rounded-full border border-white/10">
+            <div class="hidden md:flex items-center gap-3 text-sm font-light text-slate-200 glass-panel px-4 py-1.5 rounded-full border border-white/10">
               <span class="font-medium">{{ currentDate }}</span>
               <span class="w-1.5 h-1.5 bg-accent rounded-full"></span>
               <span class="text-accent-light font-serif italic">{{ hijriDate }}</span>
             </div>
           </div>
-          <div class="text-5xl font-serif font-bold text-white tracking-tight leading-none text-glow">
+          <div class="text-2xl md:text-5xl font-serif font-bold text-white tracking-tight leading-none text-glow">
             {{ hours }}<span class="animate-pulse text-accent">:</span>{{ minutes }}
           </div>
         </div>
@@ -65,7 +65,7 @@
 
       <!-- ═══════ MAIN GRID ═══════ -->
       <simplebar class="flex-1 min-h-0 landing-scroll" :force-visible="true" :click-on-track="true">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 portrait:lg:grid-cols-2 gap-5 lg:gap-6 pb-14">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 portrait:lg:grid-cols-2 gap-3 md:gap-5 lg:gap-6 pb-14">
 
         <!-- CARD 1: Berita Utama -->
         <div class="group relative overflow-hidden rounded-2xl glass-panel glass-panel-hover transition-all duration-500 cursor-pointer"
@@ -89,8 +89,8 @@
                   <span class="material-symbols-outlined text-[14px]">schedule</span> {{ latestNews ? timeAgo(latestNews.created_at) : '-' }}
                 </span>
               </div>
-              <h2 class="text-2xl font-serif font-bold text-white mb-2 leading-tight group-hover:text-accent-light transition-colors drop-shadow-md">{{ latestNews?.title || 'Memuat...' }}</h2>
-              <p class="text-slate-300 line-clamp-2 text-base font-light leading-relaxed">{{ latestNews?.excerpt || '' }}</p>
+              <h2 class="text-lg md:text-2xl font-serif font-bold text-white mb-2 leading-tight group-hover:text-accent-light transition-colors drop-shadow-md">{{ latestNews?.title || 'Memuat...' }}</h2>
+              <p class="text-slate-300 line-clamp-2 text-sm md:text-base font-light leading-relaxed">{{ latestNews?.excerpt || '' }}</p>
             </div>
             <div class="absolute top-4 right-4 z-20 bg-[#0f172a]/60 backdrop-blur-md w-10 h-10 flex items-center justify-center rounded-full border border-white/10 group-hover:bg-accent group-hover:text-[#0f172a] transition-all duration-300 group-hover:scale-110">
               <span class="material-symbols-outlined text-xl">newspaper</span>
@@ -99,7 +99,7 @@
         </div>
 
         <!-- CARD 2: Agenda Harian -->
-        <div class="group relative rounded-2xl glass-panel glass-panel-hover p-6 flex flex-col transition-all duration-500 cursor-pointer"
+        <div class="group relative rounded-2xl glass-panel glass-panel-hover p-4 md:p-6 flex flex-col transition-all duration-500 cursor-pointer"
              @click="navigateTo('agenda-harian')">
           <div class="absolute top-0 right-0 p-6 opacity-10 group-hover:opacity-20 transition-opacity">
             <span class="material-symbols-outlined !text-8xl text-accent">calendar_today</span>
@@ -109,7 +109,7 @@
               <div class="bg-gradient-to-br from-blue-500/20 to-blue-600/10 p-2.5 rounded-xl text-blue-400 border border-blue-500/20 group-hover:border-accent/50 group-hover:text-accent transition-colors shadow-[0_0_15px_rgba(59,130,246,0.1)]">
                 <span class="material-symbols-outlined text-3xl">calendar_today</span>
               </div>
-              <h3 class="text-xl font-bold text-white tracking-wide">Agenda Harian</h3>
+              <h3 class="text-base md:text-xl font-bold text-white tracking-wide">Agenda Harian</h3>
             </div>
             <span class="material-symbols-outlined text-slate-500 group-hover:text-accent transition-colors group-hover:translate-x-1 duration-300">arrow_forward_ios</span>
           </div>
@@ -135,7 +135,7 @@
         </div>
 
         <!-- CARD 3: Agenda Mingguan -->
-        <div class="group relative rounded-2xl glass-panel glass-panel-hover p-6 flex flex-col transition-all duration-500 cursor-pointer"
+        <div class="group relative rounded-2xl glass-panel glass-panel-hover p-4 md:p-6 flex flex-col transition-all duration-500 cursor-pointer"
              @click="navigateTo('agenda-mingguan')">
           <div class="absolute top-0 right-0 p-6 opacity-10 group-hover:opacity-20 transition-opacity">
             <span class="material-symbols-outlined !text-8xl text-accent">calendar_view_week</span>
@@ -145,7 +145,7 @@
               <div class="bg-gradient-to-br from-accent/20 to-yellow-600/10 p-2.5 rounded-xl text-accent border border-accent/20 group-hover:border-accent/50 transition-colors shadow-[0_0_15px_rgba(251,191,36,0.1)]">
                 <span class="material-symbols-outlined text-3xl">calendar_view_week</span>
               </div>
-              <h3 class="text-xl font-bold text-white tracking-wide">Agenda Mingguan</h3>
+              <h3 class="text-base md:text-xl font-bold text-white tracking-wide">Agenda Mingguan</h3>
             </div>
             <span class="material-symbols-outlined text-slate-500 group-hover:text-accent transition-colors group-hover:translate-x-1 duration-300">arrow_forward_ios</span>
           </div>
@@ -162,7 +162,7 @@
                 <p class="text-accent text-xs font-bold uppercase tracking-widest mb-2 flex items-center gap-2">
                   <span class="w-2 h-2 bg-accent rounded-full animate-pulse"></span> Terbaru
                 </p>
-                <p class="text-white text-xl font-serif font-medium mb-1">{{ latestWeekly.title }}</p>
+                <p class="text-white text-base md:text-xl font-serif font-medium mb-1">{{ latestWeekly.title }}</p>
                 <div class="flex items-center gap-2 text-slate-400 text-sm mt-2">
                   <span class="material-symbols-outlined text-base">location_on</span>
                   {{ latestWeekly.location || '-' }}
@@ -176,7 +176,7 @@
         </div>
 
         <!-- CARD 4: Agenda Bulanan -->
-        <div class="group relative rounded-2xl glass-panel glass-panel-hover p-6 flex flex-col transition-all duration-500 cursor-pointer"
+        <div class="group relative rounded-2xl glass-panel glass-panel-hover p-4 md:p-6 flex flex-col transition-all duration-500 cursor-pointer"
              @click="navigateTo('agenda-bulanan')">
           <div class="absolute top-0 right-0 p-6 opacity-10 group-hover:opacity-20 transition-opacity">
             <span class="material-symbols-outlined !text-8xl text-blue-400">calendar_month</span>
@@ -186,7 +186,7 @@
               <div class="bg-gradient-to-br from-blue-500/20 to-blue-600/10 p-2.5 rounded-xl text-blue-400 border border-blue-500/20 group-hover:border-blue-400/50 transition-colors shadow-[0_0_15px_rgba(96,165,250,0.1)]">
                 <span class="material-symbols-outlined text-3xl">calendar_month</span>
               </div>
-              <h3 class="text-xl font-bold text-white tracking-wide">Agenda Bulanan</h3>
+              <h3 class="text-base md:text-xl font-bold text-white tracking-wide">Agenda Bulanan</h3>
             </div>
             <span class="material-symbols-outlined text-slate-500 group-hover:text-accent transition-colors group-hover:translate-x-1 duration-300">arrow_forward_ios</span>
           </div>
@@ -243,7 +243,7 @@
         </div>
 
         <!-- CARD 6: Pengumuman -->
-        <div class="group relative rounded-2xl bg-gradient-to-br from-yellow-900/40 to-yellow-950/40 backdrop-blur-xl border border-yellow-500/30 hover:border-yellow-500/60 p-6 flex flex-col transition-all duration-500 cursor-pointer shadow-[0_0_30px_rgba(234,179,8,0.1)] hover:shadow-[0_0_40px_rgba(234,179,8,0.2)]"
+        <div class="group relative rounded-2xl bg-gradient-to-br from-yellow-900/40 to-yellow-950/40 backdrop-blur-xl border border-yellow-500/30 hover:border-yellow-500/60 p-4 md:p-6 flex flex-col transition-all duration-500 cursor-pointer shadow-[0_0_30px_rgba(234,179,8,0.1)] hover:shadow-[0_0_40px_rgba(234,179,8,0.2)]"
              @click="navigateTo('pengumuman')">
           <div class="absolute -right-2 -top-2 z-20">
             <span class="relative flex h-5 w-5">
@@ -256,7 +256,7 @@
               <div class="bg-gradient-to-br from-yellow-500/20 to-yellow-600/10 p-2.5 rounded-xl text-yellow-500 border border-yellow-500/20 group-hover:border-yellow-400/50 transition-colors shadow-[0_0_15px_rgba(234,179,8,0.2)]">
                 <span class="material-symbols-outlined text-3xl animate-pulse-slow">campaign</span>
               </div>
-              <h3 class="text-xl font-bold text-white tracking-wide">Pengumuman</h3>
+              <h3 class="text-base md:text-xl font-bold text-white tracking-wide">Pengumuman</h3>
             </div>
             <span class="material-symbols-outlined text-slate-500 group-hover:text-yellow-400 transition-colors group-hover:translate-x-1 duration-300">arrow_forward_ios</span>
           </div>
@@ -279,8 +279,8 @@
     <!-- ═══════ TICKER BAR ═══════ -->
     <div class="fixed bottom-0 left-0 w-full z-50 h-12 flex items-center">
       <div class="absolute inset-0 bg-[#020617]/90 backdrop-blur-md border-t border-accent/20"></div>
-      <div class="relative bg-accent h-full px-8 flex items-center justify-center shrink-0 z-20 shadow-[5px_0_20px_rgba(0,0,0,0.5)]">
-        <span class="text-[#0f172a] font-bold uppercase tracking-widest text-sm flex items-center gap-2">
+      <div class="relative bg-accent h-full px-4 md:px-8 flex items-center justify-center shrink-0 z-20 shadow-[5px_0_20px_rgba(0,0,0,0.5)]">
+        <span class="text-[#0f172a] font-bold uppercase tracking-widest text-xs md:text-sm flex items-center gap-2">
           <span class="material-symbols-outlined animate-pulse">info</span>
           Info Terkini
         </span>

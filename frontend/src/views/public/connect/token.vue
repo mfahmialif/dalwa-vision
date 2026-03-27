@@ -4,14 +4,14 @@
     <div class="absolute inset-0 z-0 opacity-40 pointer-events-none" :style="{ backgroundImage: patternBg, backgroundSize: '80px 140px' }"></div>
 
     <!-- ═══════ MAIN LAYOUT ═══════ -->
-    <main class="relative z-10 flex flex-col h-full w-full max-w-[1920px] mx-auto p-6 gap-2">
+    <main class="relative z-10 flex flex-col h-full w-full max-w-[1920px] mx-auto p-4 md:p-6 gap-2 overflow-y-auto">
       <!-- Header -->
       <header class="flex items-center justify-center py-2 shrink-0">
-        <div class="flex items-center gap-4 text-accent">
-          <div class="size-10 flex items-center justify-center rounded-lg bg-accent/10 border border-accent/20">
-            <span class="material-symbols-outlined text-3xl">token</span>
+        <div class="flex items-center gap-3 md:gap-4 text-accent">
+          <div class="size-8 md:size-10 flex items-center justify-center rounded-lg bg-accent/10 border border-accent/20">
+            <span class="material-symbols-outlined text-2xl md:text-3xl">token</span>
           </div>
-          <h1 class="text-white text-2xl lg:text-3xl font-bold tracking-tight uppercase">Dalwa Vision</h1>
+          <h1 class="text-white text-xl md:text-2xl lg:text-3xl font-bold tracking-tight uppercase">Dalwa Vision</h1>
         </div>
       </header>
 
@@ -20,13 +20,13 @@
         <section class="flex flex-col flex-1 max-w-2xl h-full justify-center items-center gap-6">
           <!-- Token Label -->
           <div class="flex flex-col items-center gap-4">
-            <h2 class="text-white/80 text-lg uppercase tracking-widest font-medium">Masukkan Token Perangkat</h2>
+            <h2 class="text-white/80 text-sm md:text-lg uppercase tracking-widest font-medium">Masukkan Token Perangkat</h2>
 
             <!-- Token Input Boxes -->
-            <div class="flex gap-3 lg:gap-4">
+            <div class="flex gap-2 md:gap-3 lg:gap-4">
               <div v-for="(digit, i) in tokenDigits" :key="i" class="relative group">
                 <div :class="[
-                  'w-16 h-20 lg:w-20 lg:h-24 bg-[#13224A] border-2 text-center text-4xl lg:text-5xl font-bold rounded-xl flex items-center justify-center text-white transition-all duration-300',
+                  'w-12 h-14 md:w-16 md:h-20 lg:w-20 lg:h-24 bg-[#13224A] border-2 text-center text-2xl md:text-4xl lg:text-5xl font-bold rounded-lg md:rounded-xl flex items-center justify-center text-white transition-all duration-300',
                   digit !== ''
                     ? 'border-accent shadow-[0_0_15px_rgba(251,191,36,0.3)]'
                     : i === currentIndex
@@ -37,26 +37,26 @@
                 </div>
                 <!-- Active cursor pulse -->
                 <div v-if="i === currentIndex && digit === ''"
-                     class="absolute inset-0 border-2 border-accent animate-pulse rounded-xl opacity-50"></div>
+                     class="absolute inset-0 border-2 border-accent animate-pulse rounded-lg md:rounded-xl opacity-50"></div>
               </div>
             </div>
           </div>
 
           <!-- Numpad -->
-          <div class="bg-[#13224A]/50 backdrop-blur-sm p-5 rounded-2xl border border-white/10 flex flex-col gap-3 shadow-2xl w-full max-w-sm">
-            <div class="grid grid-cols-3 gap-3">
+          <div class="bg-[#13224A]/50 backdrop-blur-sm p-3 md:p-5 rounded-xl md:rounded-2xl border border-white/10 flex flex-col gap-2 md:gap-3 shadow-2xl w-full max-w-sm">
+            <div class="grid grid-cols-3 gap-2 md:gap-3">
               <button v-for="n in [1,2,3,4,5,6,7,8,9]" :key="n"
                       @click="pressKey(n)"
-                      class="key-btn h-14 rounded-xl bg-[#13224A] border border-white/10 text-2xl font-medium text-white transition-all duration-200 hover:bg-white/5 cursor-pointer active:scale-95">
+                      class="key-btn h-12 md:h-14 rounded-lg md:rounded-xl bg-[#13224A] border border-white/10 text-xl md:text-2xl font-medium text-white transition-all duration-200 hover:bg-white/5 cursor-pointer active:scale-95">
                 {{ n }}
               </button>
               <button @click="pressKey(0)"
-                      class="key-btn col-span-2 h-14 rounded-xl bg-[#13224A] border border-white/10 text-2xl font-medium text-white transition-all duration-200 hover:bg-white/5 cursor-pointer active:scale-95">
+                      class="key-btn col-span-2 h-12 md:h-14 rounded-lg md:rounded-xl bg-[#13224A] border border-white/10 text-xl md:text-2xl font-medium text-white transition-all duration-200 hover:bg-white/5 cursor-pointer active:scale-95">
                 0
               </button>
               <button @click="backspace"
-                      class="key-btn h-14 rounded-xl bg-[#13224A] border border-white/10 text-white transition-all duration-200 hover:bg-white/5 flex items-center justify-center cursor-pointer active:scale-95">
-                <span class="material-symbols-outlined text-2xl">backspace</span>
+                      class="key-btn h-12 md:h-14 rounded-lg md:rounded-xl bg-[#13224A] border border-white/10 text-white transition-all duration-200 hover:bg-white/5 flex items-center justify-center cursor-pointer active:scale-95">
+                <span class="material-symbols-outlined text-xl md:text-2xl">backspace</span>
               </button>
             </div>
           </div>
@@ -66,7 +66,7 @@
             <button @click="connectDevice"
                     :disabled="!isTokenComplete"
                     :class="[
-                      'key-btn w-full font-bold text-lg uppercase tracking-wide py-4 px-12 rounded-xl transition-all flex items-center justify-center gap-3 cursor-pointer active:scale-95',
+                      'key-btn w-full font-bold text-base md:text-lg uppercase tracking-wide py-3 md:py-4 px-8 md:px-12 rounded-xl transition-all flex items-center justify-center gap-3 cursor-pointer active:scale-95',
                       isTokenComplete
                         ? 'bg-accent text-[#0A1128] shadow-[0_0_15px_rgba(251,191,36,0.3)] hover:brightness-110'
                         : 'bg-accent/30 text-[#0A1128]/50 cursor-not-allowed'

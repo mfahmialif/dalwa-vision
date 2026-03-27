@@ -23,7 +23,7 @@
             <p class="text-blue-200/60 text-xs md:text-sm font-medium tracking-wide mt-1">BROADCAST SYSTEM</p>
           </div>
         </div>
-        <h2 class="text-xl md:text-3xl font-bold tracking-[0.2em] text-accent uppercase drop-shadow-[0_0_10px_rgba(251,191,36,0.5)]">Agenda Mingguan</h2>
+        <h2 class="text-base md:text-3xl font-bold tracking-[0.2em] text-accent uppercase drop-shadow-[0_0_10px_rgba(251,191,36,0.5)]">Agenda Mingguan</h2>
         <div class="hidden md:flex items-center gap-6">
           <div class="text-right">
             <div class="text-3xl font-bold text-white tabular-nums leading-none">{{ currentTime }} <span class="text-base font-medium text-blue-200/50 align-top">WIB</span></div>
@@ -33,10 +33,10 @@
         </div>
       </header>
 
-      <!-- ═══════ WEEKLY CARDS ═══════ -->
-      <main class="flex-1 flex items-center justify-center w-full overflow-hidden py-2">
-        <div class="flex portrait:flex-wrap items-center justify-center gap-2 md:gap-3 w-full h-full min-w-0">
-          <div v-for="(day, index) in weekDays" :key="day.name"
+      <!-- ═══════ WEEKLY CARDS — DESKTOP / LANDSCAPE ═══════ -->
+      <main class="hidden md:flex flex-1 items-center justify-center w-full overflow-hidden py-2">
+        <div class="flex items-center justify-center gap-3 w-full h-full min-w-0">
+          <div v-for="(day, index) in weekDays" :key="'desk-'+day.name"
                @click="selectDay(index)"
                :class="[
                  'flex flex-col rounded-xl transition-all duration-500 cursor-pointer',
@@ -70,23 +70,16 @@
             <!-- Agenda Items -->
             <simplebar :class="['agenda-scroll', index === selectedDayIndex ? 'flex-1 min-h-0' : 'max-h-[40vh]']" :force-visible="true" :click-on-track="true">
               <div :class="['flex flex-col', index === selectedDayIndex ? 'gap-4' : 'gap-3']">
-              <!-- Selected Day: Grouped by time -->
               <template v-if="index === selectedDayIndex">
                 <div v-for="group in day.timeGroups" :key="group.time"
                      @click.stop="router.push({ name: 'DetailWeekly', params: { id: group.items[0].id } })"
-                     :class="[
-                       'flex gap-4 items-start p-3 rounded-lg transition-colors cursor-pointer',
-                       'bg-blue-900/20 border border-blue-500/20 hover:bg-blue-800/30'
-                     ]">
+                     class="flex gap-4 items-start p-3 rounded-lg transition-colors cursor-pointer bg-blue-900/20 border border-blue-500/20 hover:bg-blue-800/30">
                   <div class="flex flex-col items-center justify-center min-w-[55px] border-r border-white/10 pr-3">
                     <span class="text-lg font-bold text-accent">{{ group.time }}</span>
                     <span v-if="group.items.length > 1" class="text-[10px] text-yellow-300 mt-0.5">{{ group.items.length }} kegiatan</span>
                   </div>
                   <div class="flex flex-col flex-1 min-w-0 gap-1.5">
-                    <div v-for="(item, iIdx) in group.items" :key="item.id"
-                         :class="[
-                           iIdx > 0 ? 'pt-1.5 border-t border-white/5' : ''
-                         ]">
+                    <div v-for="(item, iIdx) in group.items" :key="item.id" :class="[iIdx > 0 ? 'pt-1.5 border-t border-white/5' : '']">
                       <span class="text-white font-bold text-base leading-snug truncate block">
                         <span v-if="group.items.length > 1" class="material-symbols-outlined text-[14px] mr-1 align-middle text-yellow-400">{{ item.icon || 'event' }}</span>
                         {{ item.title }}
@@ -104,8 +97,6 @@
                   <span class="text-blue-200/30 italic text-sm">Tidak ada agenda</span>
                 </div>
               </template>
-
-              <!-- Other days (compact, also grouped) -->
               <template v-else>
                 <div v-if="day.timeGroups.length === 0" class="flex items-center justify-center h-full pb-4">
                   <span class="text-blue-200/30 italic text-sm">Tidak ada agenda</span>
@@ -129,9 +120,83 @@
         </div>
       </main>
 
+      <!-- ═══════ WEEKLY — MOBILE / PORTRAIT (Tab Layout) ═══════ -->
+      <main class="md:hidden flex-1 flex flex-col w-full overflow-hidden gap-3">
+        <!-- Day Selector Tabs -->
+        <div class="flex gap-1.5 overflow-x-auto no-scrollbar shrink-0 px-1 py-1">
+          <button v-for="(day, index) in weekDays" :key="'mob-'+day.name"
+                  @click="selectDay(index)"
+                  :class="[
+                    'flex flex-col items-center px-3 py-2 rounded-xl transition-all duration-300 cursor-pointer shrink-0 min-w-[52px]',
+                    index === selectedDayIndex
+                      ? 'bg-accent text-[#0a192f] shadow-[0_0_15px_rgba(251,191,36,0.4)]'
+                      : day.isPast
+                        ? 'bg-white/5 text-slate-500'
+                        : 'bg-white/5 text-white hover:bg-white/10',
+                    day.name === 'Minggu' && index !== selectedDayIndex ? 'text-red-400!' : ''
+                  ]">
+            <span class="text-[10px] font-bold uppercase tracking-wider">{{ day.name.substring(0, 3) }}</span>
+            <span v-if="day.timeGroups?.length" :class="[
+              'text-[8px] font-bold mt-0.5 px-1.5 rounded-full',
+              index === selectedDayIndex ? 'bg-[#0a192f]/20' : 'bg-accent/20 text-accent'
+            ]">{{ day.timeGroups.reduce((a, g) => a + g.items.length, 0) }}</span>
+            <div v-if="day.isToday && index !== selectedDayIndex" class="w-1 h-1 rounded-full bg-accent mt-0.5"></div>
+          </button>
+        </div>
+
+        <!-- Selected Day Content -->
+        <div class="flex-1 glass-card-active rounded-2xl p-4 overflow-hidden flex flex-col relative">
+          <!-- Day Title -->
+          <div class="flex items-center justify-between border-b border-blue-400/30 pb-3 mb-3">
+            <div class="flex items-center gap-2">
+              <h3 class="text-xl font-bold text-accent uppercase tracking-tight">{{ weekDays[selectedDayIndex]?.name }}</h3>
+              <span v-if="weekDays[selectedDayIndex]?.isToday" class="text-[10px] font-bold bg-accent/20 text-accent px-2 py-0.5 rounded-full border border-accent/30">Hari Ini</span>
+            </div>
+            <div class="size-8 bg-blue-900/40 rounded-full flex items-center justify-center border border-blue-500/20">
+              <span class="material-symbols-outlined text-accent text-lg">calendar_today</span>
+            </div>
+          </div>
+
+          <!-- Agenda List -->
+          <simplebar class="agenda-scroll flex-1 min-h-0" :force-visible="true" :click-on-track="true">
+            <div class="flex flex-col gap-3">
+              <template v-if="weekDays[selectedDayIndex]?.timeGroups?.length">
+                <div v-for="group in weekDays[selectedDayIndex].timeGroups" :key="group.time"
+                     @click="router.push({ name: 'DetailWeekly', params: { id: group.items[0].id } })"
+                     class="flex gap-3 items-start p-3 rounded-xl transition-colors cursor-pointer bg-blue-900/20 border border-blue-500/20 hover:bg-blue-800/30 active:scale-[0.98]">
+                  <div class="flex flex-col items-center justify-center min-w-[48px] border-r border-white/10 pr-2">
+                    <span class="text-base font-bold text-accent">{{ group.time }}</span>
+                    <span v-if="group.items.length > 1" class="text-[9px] text-yellow-300 mt-0.5">{{ group.items.length }} item</span>
+                  </div>
+                  <div class="flex flex-col flex-1 min-w-0 gap-1">
+                    <div v-for="(item, iIdx) in group.items" :key="item.id" :class="[iIdx > 0 ? 'pt-1.5 border-t border-white/5' : '']">
+                      <span class="text-white font-bold text-sm leading-snug truncate block">
+                        <span v-if="group.items.length > 1" class="material-symbols-outlined text-[13px] mr-1 align-middle text-yellow-400">{{ item.icon || 'event' }}</span>
+                        {{ item.title }}
+                      </span>
+                      <div class="flex items-center gap-1.5 mt-0.5 flex-wrap">
+                        <span :class="categoryBadgeClass(item.category)">{{ item.category }}</span>
+                        <span class="text-blue-200/80 text-[11px] flex items-center gap-0.5 truncate">
+                          <span class="material-symbols-outlined text-[11px] text-accent">location_on</span> {{ item.location || '-' }}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <span class="material-symbols-outlined text-white/20 text-lg shrink-0 self-center">chevron_right</span>
+                </div>
+              </template>
+              <div v-else class="flex flex-col items-center justify-center py-12 gap-3">
+                <span class="material-symbols-outlined text-4xl text-white/15">event_busy</span>
+                <span class="text-blue-200/30 italic text-sm">Tidak ada agenda</span>
+              </div>
+            </div>
+          </simplebar>
+        </div>
+      </main>
+
       <!-- ═══════ INFO BAR ═══════ -->
-      <footer class="h-12 bg-[#0a192f]/80 backdrop-blur-md border-t border-blue-500/20 rounded-lg flex items-center px-4 overflow-hidden w-full">
-        <div class="flex items-center gap-2 bg-accent px-3 py-1 rounded text-[#0a192f] font-bold text-sm mr-4 shrink-0 shadow-[0_0_10px_rgba(251,191,36,0.4)]">
+      <footer class="h-10 md:h-12 bg-[#0a192f]/80 backdrop-blur-md border-t border-blue-500/20 rounded-lg flex items-center px-3 md:px-4 overflow-hidden w-full">
+        <div class="flex items-center gap-2 bg-accent px-2 md:px-3 py-1 rounded text-[#0a192f] font-bold text-xs md:text-sm mr-3 md:mr-4 shrink-0 shadow-[0_0_10px_rgba(251,191,36,0.4)]">
           <span class="material-symbols-outlined text-lg text-[#0a192f]">campaign</span>
           INFO
         </div>

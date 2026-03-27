@@ -6,16 +6,16 @@
     <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vw] h-[80vw] bg-blue-900/20 rounded-full blur-[120px] pointer-events-none animate-pulse-slow"></div>
 
     <!-- ═══════ CONTENT ═══════ -->
-    <main class="relative z-10 flex flex-col items-center justify-center w-full h-full max-w-5xl mx-auto px-6 py-12 text-center">
+    <main class="relative z-10 flex flex-col items-center justify-center w-full h-full max-w-5xl mx-auto px-4 md:px-6 py-8 md:py-12 text-center overflow-y-auto">
 
       <!-- Checkmark Icon -->
-      <div class="mb-10 scale-in relative">
+      <div class="mb-6 md:mb-10 scale-in relative">
         <div class="absolute inset-0 bg-accent/30 blur-2xl rounded-full scale-110"></div>
-        <div class="relative w-32 h-32 md:w-40 md:h-40 rounded-full bg-accent flex items-center justify-center shadow-[0_0_60px_-10px_rgba(251,191,36,0.4)] border-4 border-yellow-600/30">
-          <span class="material-symbols-outlined text-[#001226] text-[64px] md:text-[80px] font-bold">check</span>
+        <div class="relative w-24 h-24 md:w-40 md:h-40 rounded-full bg-accent flex items-center justify-center shadow-[0_0_60px_-10px_rgba(251,191,36,0.4)] border-4 border-yellow-600/30">
+          <span class="material-symbols-outlined text-[#001226] text-[48px] md:text-[80px] font-bold">check</span>
         </div>
         <!-- Progress ring -->
-        <svg class="absolute top-0 left-0 w-32 h-32 md:w-40 md:h-40 -rotate-90 pointer-events-none">
+        <svg class="absolute top-0 left-0 w-24 h-24 md:w-40 md:h-40 -rotate-90 pointer-events-none">
           <circle class="opacity-20" cx="50%" cy="50%" fill="transparent" r="48%" stroke="white" stroke-dasharray="251.2" stroke-dashoffset="50" stroke-width="2"></circle>
           <circle class="progress-ring" cx="50%" cy="50%" fill="transparent" r="48%" stroke="#fbbf24" stroke-dasharray="251.2" stroke-dashoffset="0" stroke-linecap="round" stroke-width="4"></circle>
         </svg>
@@ -24,16 +24,16 @@
       <!-- Text Content -->
       <div class="flex flex-col items-center gap-6 fade-up">
         <div class="space-y-2">
-          <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight text-white drop-shadow-lg">
+          <h1 class="text-3xl md:text-6xl font-extrabold tracking-tight text-white drop-shadow-lg">
             Terhubung Berhasil
           </h1>
-          <p class="text-xl md:text-2xl text-slate-200 font-medium">
+          <p class="text-base md:text-2xl text-slate-200 font-medium">
             Perangkat TV Anda telah terdaftar.
           </p>
         </div>
 
         <!-- Device Info Card -->
-        <div class="mt-4 flex flex-col md:flex-row items-center gap-4 md:gap-8 bg-[#002855]/60 backdrop-blur-md border border-white/10 px-8 py-5 rounded-xl shadow-2xl ring-1 ring-white/5">
+        <div class="mt-4 flex flex-col md:flex-row items-center gap-4 md:gap-8 bg-[#002855]/60 backdrop-blur-md border border-white/10 px-5 md:px-8 py-4 md:py-5 rounded-xl shadow-2xl ring-1 ring-white/5">
           <div class="flex items-center gap-3">
             <div class="p-2 bg-white/10 rounded-full">
               <span class="material-symbols-outlined text-accent text-2xl">tv</span>
@@ -59,7 +59,7 @@
         <!-- CTA Buttons -->
         <div class="mt-10 flex flex-col items-center gap-4">
           <button @click="goToLanding"
-                  class="group relative flex items-center gap-3 bg-accent hover:bg-yellow-400 active:scale-95 transition-all duration-200 text-[#001226] font-bold text-lg md:text-xl px-10 py-4 rounded-full shadow-[0_0_30px_-5px_rgba(251,191,36,0.3)] overflow-hidden border border-yellow-300/50 cursor-pointer">
+                  class="group relative flex items-center gap-3 bg-accent hover:bg-yellow-400 active:scale-95 transition-all duration-200 text-[#001226] font-bold text-base md:text-xl px-8 md:px-10 py-3 md:py-4 rounded-full shadow-[0_0_30px_-5px_rgba(251,191,36,0.3)] overflow-hidden border border-yellow-300/50 cursor-pointer">
             <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">play_arrow</span>
             <span>Mulai Dalwa Vision</span>
             <div class="absolute inset-0 -translate-x-full group-hover:animate-shimmer bg-linear-to-r from-transparent via-white/40 to-transparent skew-x-12"></div>

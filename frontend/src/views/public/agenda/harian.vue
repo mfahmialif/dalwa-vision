@@ -39,9 +39,9 @@
       <main class="flex flex-col md:flex-row portrait:flex-col flex-1 gap-4 md:gap-8 overflow-hidden">
 
         <!-- ═══════ LEFT: TIMELINE SIDEBAR ═══════ -->
-        <div class="w-full md:w-1/3 portrait:w-full flex flex-col glass-panel rounded-2xl overflow-hidden shadow-2xl ring-1 ring-yellow-500/10 max-h-[40vh] md:max-h-none portrait:max-h-[35vh]">
-          <div class="p-6 bg-blue-950/40 border-b border-yellow-500/10">
-            <h2 class="text-xl font-semibold flex items-center gap-2 text-accent">
+        <div class="w-full md:w-1/3 portrait:w-full flex flex-col glass-panel rounded-2xl overflow-hidden shadow-2xl ring-1 ring-yellow-500/10 max-h-none md:max-h-none portrait:max-h-none">
+          <div class="p-4 md:p-6 bg-blue-950/40 border-b border-yellow-500/10">
+            <h2 class="text-base md:text-xl font-semibold flex items-center gap-2 text-accent">
               <span class="material-symbols-outlined text-yellow-400">calendar_month</span>
               Jadwal Hari Ini
             </h2>
@@ -135,7 +135,7 @@
         </div>
 
         <!-- ═══════ RIGHT: DETAIL PANEL ═══════ -->
-        <div class="w-2/3 flex flex-col gap-6">
+        <div class="hidden md:flex portrait:hidden w-2/3 flex-col gap-6">
           <!-- Main Detail Card -->
           <div class="flex-1 glass-panel rounded-2xl p-1 overflow-hidden shadow-2xl flex flex-col relative group border-t border-t-yellow-500/20">
             <div class="absolute inset-0 z-0">
@@ -144,7 +144,7 @@
               <div class="absolute inset-0 bg-linear-to-t from-bg-deepest via-bg-deepest/80 to-blue-900/20 mix-blend-multiply"></div>
               <div class="absolute inset-0 bg-linear-to-t from-blue-950 via-transparent to-transparent opacity-80"></div>
             </div>
-            <div class="relative z-10 flex flex-col h-full p-8 pb-6 justify-end">
+            <div class="relative z-10 flex flex-col h-full p-4 md:p-8 pb-4 md:pb-6 justify-end">
               <!-- Top Info -->
               <div class="flex items-start gap-6 mb-auto">
                 <div class="bg-blue-900/40 backdrop-blur-md border border-yellow-500/30 p-4 rounded-2xl text-yellow-400 shadow-[0_0_15px_rgba(250,204,21,0.4)]">
@@ -170,7 +170,7 @@
                       </button>
                     </div>
                   </div>
-                  <h2 class="text-5xl font-bold text-white tracking-tight leading-tight mb-2 drop-shadow-lg">{{ selectedGroup.items?.[activeItemIdx]?.title }}</h2>
+                  <h2 class="text-2xl md:text-5xl font-bold text-white tracking-tight leading-tight mb-2 drop-shadow-lg">{{ selectedGroup.items?.[activeItemIdx]?.title }}</h2>
                 </div>
               </div>
 
@@ -210,7 +210,7 @@
           </div>
 
           <!-- ═══════ NEXT UP BAR ═══════ -->
-          <div class="h-24 glass-panel rounded-2xl flex items-center px-8 relative overflow-hidden border-t-4 border-t-yellow-500 shadow-lg shadow-yellow-900/20">
+          <div class="hidden md:flex portrait:hidden h-24 glass-panel rounded-2xl items-center px-8 relative overflow-hidden border-t-4 border-t-yellow-500 shadow-lg shadow-yellow-900/20">
             <div class="absolute left-0 top-0 bottom-0 w-2 bg-linear-to-b from-yellow-400 to-yellow-600"></div>
             <div class="flex flex-col mr-8 min-w-[120px]">
               <span class="text-yellow-400 text-sm font-bold uppercase tracking-wider mb-1">Selanjutnya</span>
