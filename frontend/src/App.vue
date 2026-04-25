@@ -86,6 +86,23 @@
       </div>
     </div>
   </Transition>
+
+  <!-- ═══ IMPERSONATE FLOATING BADGE ═══ -->
+  <Transition name="fade">
+    <div v-if="impersonateDevice" class="fixed top-4 right-4 z-999 flex items-center gap-3 px-5 py-3 rounded-xl shadow-2xl border border-purple-500/40" style="background: linear-gradient(135deg, rgba(147,51,234,0.15), rgba(15,23,42,0.95)); backdrop-filter: blur(12px)">
+      <div class="flex h-3 w-3 relative">
+        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"></span>
+        <span class="relative inline-flex rounded-full h-3 w-3 bg-purple-400"></span>
+      </div>
+      <div>
+        <p class="text-[11px] font-bold uppercase tracking-widest text-purple-300">Mengendalikan</p>
+        <p class="text-sm font-bold text-white">{{ impersonateDevice.name }}</p>
+      </div>
+      <button @click="stopImpersonate" class="ml-2 p-1.5 rounded-lg text-purple-300 hover:text-white hover:bg-purple-500/20 transition-colors cursor-pointer" title="Hentikan Impersonifikasi">
+        <span class="material-symbols-outlined text-[18px]">close</span>
+      </button>
+    </div>
+  </Transition>
 </template>
 
 <script setup>
@@ -100,10 +117,15 @@ const route = useRoute()
 // ── Global Banner State ──
 const globalBanner = ref(null) // { title, message, type }
 
-// ── Admin/operator detection (don't show banner for them, UNLESS admin_view=1) ──
+// ── Impersonate State ──
+const impersonateDevice = ref(null)   // { id, name }
+const impersonateDeviceId = ref(null) // device ID from query
+
+// ── Admin/operator detection (don't show banner for them, UNLESS admin_view=1 or impersonating) ──
 const isAdminUser = computed(() => {
-  // If admin_view=1, allow banner even for admin (viewing via 'Lihat TV')
+  // If admin_view=1 or impersonating, allow banner even for admin
   if (route.query.admin_view === '1') return false
+  if (impersonateDeviceId.value) return false
   return !!localStorage.getItem('auth_token') || route.path.startsWith('/administrator') || route.path === '/login'
 })
 
@@ -264,11 +286,70 @@ async function fetchActiveBanner() {
   } catch { /* silent */ }
 }
 
-onMounted(() => {
+onMounted(async () => {
   startHeartbeat()
   startEchoListener()
   fetchActiveBanner()
   window.addEventListener('beforeunload', handleBeforeUnload)
+
+  // ── Impersonate mode detection ──
+  // Must wait for router to be ready — route.query is empty at mount time
+  await router.isReady()
+  console.log('[Impersonate] Route ready, query:', route.query)
+
+  if (route.query.impersonate) {
+    impersonateDeviceId.value = Number(route.query.impersonate)
+    console.log('[Impersonate] Detected device_id:', impersonateDeviceId.value)
+    try {
+      // Fetch device info to display name
+      const devRes = await api.get('/tv-devices', { params: { per_page: 100 } })
+      const dev = (devRes.data.data || []).find(d => d.id == impersonateDeviceId.value)
+      if (dev) {
+        impersonateDevice.value = { id: dev.id, name: dev.name }
+      } else {
+        impersonateDevice.value = { id: impersonateDeviceId.value, name: `TV #${impersonateDeviceId.value}` }
+      }
+    } catch (e) {
+      console.warn('Impersonate: failed to fetch device info', e)
+      impersonateDevice.value = { id: impersonateDeviceId.value, name: `TV #${impersonateDeviceId.value}` }
+    }
+    // Push initial page to TV
+    pushToTv('/')
+  }
+})
+
+// ── Impersonate: push navigation to TV on every route change ──
+function pushToTv(path) {
+  if (!impersonateDeviceId.value) return
+  console.log('[Impersonate] Pushing path to TV:', path, 'device_id:', impersonateDeviceId.value)
+  api.post('/tv-commands/push', {
+    device_id: Number(impersonateDeviceId.value),
+    path: path,
+    label: 'Impersonate',
+  }).then(res => {
+    console.log('[Impersonate] Push result:', res.data)
+  }).catch(err => {
+    console.error('[Impersonate] Push failed:', err.response?.data || err.message)
+  })
+}
+
+function stopImpersonate() {
+  impersonateDevice.value = null
+  impersonateDeviceId.value = null
+  window.close()
+}
+
+// Watch route changes for impersonate mode — push navigation to real TV
+let pushDebounce = null
+watch(() => route.fullPath, (newPath) => {
+  if (!impersonateDeviceId.value || !newPath) return
+  // Debounce to avoid duplicate pushes on rapid navigation
+  clearTimeout(pushDebounce)
+  pushDebounce = setTimeout(() => {
+    // Extract just the path without query params for clarity
+    const cleanPath = newPath.split('?')[0]
+    pushToTv(cleanPath)
+  }, 200)
 })
 
 // Re-fetch banner when admin_view query appears (new tab may not have query ready at mount)
@@ -353,5 +434,9 @@ onUnmounted(() => {
 .banner-content ul, .banner-content ol { text-align: left; padding-left: 1.5em; margin: 0.5em auto; max-width: max-content; }
 .banner-content li { margin-bottom: 0.25em; }
 .banner-content a { color: #93c5fd; text-decoration: underline; }
+
+/* Fade transitions (impersonate badge) */
+.fade-enter-active, .fade-leave-active { transition: opacity 0.3s ease, transform 0.3s ease; }
+.fade-enter-from, .fade-leave-to { opacity: 0; transform: translateY(-8px); }
 </style>
 

@@ -336,8 +336,10 @@ router.beforeEach((to) => {
 
   // Redirect ke /connect jika route butuh TV terhubung tapi belum ada token
   // Admin/Operator yang sudah login tetap bisa akses (untuk fitur Lihat TV)
+  // Impersonate mode juga diizinkan
   const isTvConnected = !!localStorage.getItem('tv_token')
-  if (to.meta.requiresTv && !isTvConnected && !isAuthenticated) {
+  const isImpersonating = !!to.query.impersonate
+  if (to.meta.requiresTv && !isTvConnected && !isAuthenticated && !isImpersonating) {
     return { name: 'ConnectToken' }
   }
 

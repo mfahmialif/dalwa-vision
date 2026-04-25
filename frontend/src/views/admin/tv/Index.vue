@@ -154,6 +154,11 @@
               <span class="material-symbols-outlined text-[18px]">live_tv</span>
               Lihat TV
             </button>
+            <button @click="doImpersonate(device)"
+                    class="w-full py-2.5 px-4 rounded-lg text-sm font-bold transition-colors flex items-center justify-center gap-2 bg-purple-500/10 border border-purple-500/30 text-purple-400 hover:bg-purple-500/20 cursor-pointer">
+              <span class="material-symbols-outlined text-[18px]">person_play</span>
+              Impersonifikasi
+            </button>
             <button @click="doForceDisconnect(device)"
                     class="w-full py-2 px-4 rounded-lg text-xs font-medium transition-colors flex items-center justify-center gap-2 text-red-400 hover:bg-red-500/10 border border-red-500/20 hover:border-red-500/40 cursor-pointer">
               <span class="material-symbols-outlined text-[16px]">link_off</span>
@@ -345,6 +350,12 @@ async function doRegenerateToken(device) {
     const idx = store.devices.findIndex(d => d.id === device.id)
     if (idx !== -1) store.devices[idx] = updated
   } catch (e) { console.error(e) }
+}
+
+// ── Impersonate (Remote Control) ──
+function doImpersonate(device) {
+  const resolved = router.resolve({ path: '/', query: { impersonate: device.id } })
+  window.open(resolved.href, '_blank')
 }
 
 // ── Force Disconnect ──

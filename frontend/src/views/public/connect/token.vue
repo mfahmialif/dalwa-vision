@@ -3,8 +3,22 @@
     <!-- ═══════ PATTERN BACKGROUND ═══════ -->
     <div class="absolute inset-0 z-0 opacity-40 pointer-events-none" :style="{ backgroundImage: patternBg, backgroundSize: '80px 140px' }"></div>
 
-    <!-- ═══════ MAIN LAYOUT ═══════ -->
-    <main class="relative z-10 flex flex-col h-full w-full max-w-[1920px] mx-auto p-4 md:p-6 gap-2 overflow-y-auto">
+    <!-- ═══════ AUTO-RECONNECT OVERLAY ═══════ -->
+    <div v-if="autoReconnecting" class="relative z-10 flex flex-col items-center justify-center w-full h-full gap-6">
+      <div class="relative">
+        <div class="absolute inset-0 bg-accent/20 blur-2xl rounded-full scale-150 animate-pulse"></div>
+        <div class="relative w-28 h-28 md:w-36 md:h-36 rounded-full bg-[#13224A] border-2 border-accent/40 flex items-center justify-center">
+          <span class="material-symbols-outlined text-accent text-[56px] md:text-[72px] animate-spin" style="animation-duration: 2s">progress_activity</span>
+        </div>
+      </div>
+      <div class="text-center">
+        <h2 class="text-2xl md:text-4xl font-bold text-white mb-2">Menyambungkan Kembali...</h2>
+        <p class="text-slate-400 text-sm md:text-base">Menghubungkan ke <span class="text-accent font-bold">{{ rememberedDeviceName || 'TV' }}</span></p>
+      </div>
+    </div>
+
+    <!-- ═══════ MAIN LAYOUT (Token Input) ═══════ -->
+    <main v-else class="relative z-10 flex flex-col h-full w-full max-w-[1920px] mx-auto p-4 md:p-6 gap-2 overflow-y-auto">
       <!-- Header -->
       <header class="flex items-center justify-center py-2 shrink-0">
         <div class="flex items-center gap-3 md:gap-4 text-accent">
@@ -76,6 +90,16 @@
             </button>
           </div>
 
+          <!-- Reconnect Button (when remembered token exists but auto-reconnect failed) -->
+          <div v-if="hasRememberedToken && reconnectFailed" class="flex flex-col items-center gap-3 w-full max-w-sm">
+            <div class="w-full h-px bg-white/10"></div>
+            <button @click="tryReconnect"
+                    class="w-full flex items-center justify-center gap-3 py-3 px-6 rounded-xl bg-green-500/10 border border-green-500/30 text-green-400 font-bold text-sm uppercase tracking-wide hover:bg-green-500/20 transition-all cursor-pointer active:scale-95">
+              <span class="material-symbols-outlined text-[20px]">refresh</span>
+              Sambungkan Kembali ({{ rememberedDeviceName || 'TV' }})
+            </button>
+          </div>
+
           <!-- Error message -->
           <Transition name="fade">
             <p v-if="errorMsg" class="text-red-400 text-sm font-medium flex items-center gap-2">
@@ -90,7 +114,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import api from '../../../axios'
 
@@ -100,6 +124,16 @@ const router = useRouter()
 const tokenDigits = ref(['', '', '', '', '', ''])
 const errorMsg = ref('')
 const connecting = ref(false)
+const autoReconnecting = ref(false)
+const reconnectFailed = ref(false)
+
+// ── Remembered Token ──
+const hasRememberedToken = computed(() => !!localStorage.getItem('tv_remembered_token'))
+const rememberedDeviceName = computed(() => {
+  try {
+    return JSON.parse(localStorage.getItem('tv_remembered_device') || 'null')?.name || ''
+  } catch { return '' }
+})
 
 const currentIndex = computed(() => {
   const idx = tokenDigits.value.findIndex(d => d === '')
@@ -126,6 +160,17 @@ function backspace() {
   }
 }
 
+async function connectWithToken(token) {
+  const { data } = await api.post('/tv/connect', { token })
+  // Store device info
+  localStorage.setItem('tv_device', JSON.stringify(data.device))
+  localStorage.setItem('tv_token', token)
+  // Remember token for future auto-reconnect
+  localStorage.setItem('tv_remembered_token', token)
+  localStorage.setItem('tv_remembered_device', JSON.stringify(data.device))
+  return data
+}
+
 async function connectDevice() {
   if (!isTokenComplete.value || connecting.value) return
   connecting.value = true
@@ -133,10 +178,7 @@ async function connectDevice() {
   const token = tokenDigits.value.join('')
 
   try {
-    const { data } = await api.post('/tv/connect', { token })
-    // Store device info for ConnectSuccess page
-    localStorage.setItem('tv_device', JSON.stringify(data.device))
-    localStorage.setItem('tv_token', token)
+    await connectWithToken(token)
     router.push({ name: 'ConnectSuccess' })
   } catch (e) {
     if (e.response?.status === 404) {
@@ -144,12 +186,42 @@ async function connectDevice() {
     } else {
       errorMsg.value = 'Gagal terhubung ke server. Periksa koneksi jaringan.'
     }
-    // Reset digits on failure
     tokenDigits.value = ['', '', '', '', '', '']
   } finally {
     connecting.value = false
   }
 }
+
+async function tryReconnect() {
+  const token = localStorage.getItem('tv_remembered_token')
+  if (!token) return
+  autoReconnecting.value = true
+  reconnectFailed.value = false
+
+  try {
+    await connectWithToken(token)
+    router.push({ name: 'ConnectSuccess' })
+  } catch (e) {
+    autoReconnecting.value = false
+    reconnectFailed.value = true
+    if (e.response?.status === 404) {
+      errorMsg.value = 'Token sebelumnya sudah tidak valid. Silakan masukkan token baru.'
+      localStorage.removeItem('tv_remembered_token')
+      localStorage.removeItem('tv_remembered_device')
+    } else {
+      errorMsg.value = 'Gagal terhubung ke server. Coba lagi nanti.'
+    }
+  }
+}
+
+// ── Auto-reconnect on mount ──
+onMounted(() => {
+  const rememberedToken = localStorage.getItem('tv_remembered_token')
+  if (rememberedToken) {
+    // Auto-reconnect — try immediately
+    tryReconnect()
+  }
+})
 
 // ── Pattern ──
 const patternBg = `
