@@ -110,6 +110,7 @@ import { ref, computed, onMounted, watch } from 'vue'
 import VueMultiselect from 'vue-multiselect'
 import 'vue-multiselect/dist/vue-multiselect.css'
 import { useGalleryStore } from '../../../../stores/gallery'
+import { storageUrl } from '../../../../utils/asset'
 
 const galleryStore = useGalleryStore()
 const searchQuery = ref('')
@@ -130,7 +131,7 @@ const statsCards = computed(() => [
 ])
 
 function thumbUrl(item) {
-  if (item.image_path) return `/storage/${item.image_path}`
+  if (item.image_path) return storageUrl(item.image_path)
   return '/img/default-agenda.png'
 }
 

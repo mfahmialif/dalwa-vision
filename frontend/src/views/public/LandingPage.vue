@@ -305,6 +305,7 @@ import { useRouter } from 'vue-router'
 import simplebar from 'simplebar-vue'
 import 'simplebar-vue/dist/simplebar.min.css'
 import api from '../../axios'
+import { storageUrl } from '../../utils/asset'
 
 const router = useRouter()
 
@@ -419,7 +420,7 @@ function fetchLandingData() {
       const n = items[0]
       latestNews.value = {
         ...n,
-        image: n.image_path ? `/storage/${n.image_path}` : '/img/hero-bg.jpg',
+        image: n.image_path ? storageUrl(n.image_path) : '/img/hero-bg.jpg',
         excerpt: n.body ? n.body.replace(/<[^>]*>/g, '').substring(0, 120) + '...' : '',
       }
       tickerItems.value = items.map(n => n.title)
@@ -493,7 +494,7 @@ function fetchLandingData() {
     const items = res.data?.data || res.data || []
     galleryThumbs.value = items.slice(0, 2).map(g => ({
       id: g.id, title: g.title,
-      image: g.image_path ? `/storage/${g.image_path}` : '/img/default-video.png',
+      image: g.image_path ? storageUrl(g.image_path) : '/img/default-video.png',
     }))
     galleryCount.value = res.data?.total || items.length || 0
   }).catch(() => {}).finally(() => { loadingGallery.value = false })

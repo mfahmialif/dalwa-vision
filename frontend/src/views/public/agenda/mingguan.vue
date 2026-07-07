@@ -216,6 +216,7 @@ import { useRouter } from 'vue-router'
 import simplebar from 'simplebar-vue'
 import 'simplebar-vue/dist/simplebar.min.css'
 import api from '../../../axios'
+import { storageUrl } from '../../../utils/asset'
 
 const router = useRouter()
 
@@ -263,8 +264,8 @@ function transformItem(item) {
     ...item,
     time: item.time?.substring(0, 5),
     description: item.body,
-    image: item.image_path ? `/storage/${item.image_path}` : '/img/default-agenda.png',
-    videoUrl: item.video_path ? `/storage/${item.video_path}` : null,
+    image: item.image_path ? storageUrl(item.image_path) : '/img/default-agenda.png',
+    videoUrl: item.video_path ? storageUrl(item.video_path) : null,
     speaker: item.teacher,
     date: `${item.day}`,
   }

@@ -214,6 +214,7 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import api from '../../axios'
+import { storageUrl } from '../../utils/asset'
 
 const router = useRouter()
 function goBack() { router.push({ name: 'Landing' }) }
@@ -292,7 +293,7 @@ const regularItems = computed(() => {
 
 
 // ── Helpers ──
-function getImageUrl(item) { return item.image_path ? `/storage/${item.image_path}` : '/img/default-agenda.png' }
+function getImageUrl(item) { return item.image_path ? storageUrl(item.image_path) : '/img/default-agenda.png' }
 
 function formatDate(dateStr) {
   if (!dateStr) return ''

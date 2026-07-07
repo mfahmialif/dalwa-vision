@@ -55,14 +55,14 @@
               </h1>
             </div>
             <div class="max-w-none">
-              <p class="text-lg text-slate-300 leading-relaxed font-normal" v-html="announcement.body"></p>
+              <p class="text-lg text-slate-300 leading-relaxed font-normal" v-html="fixHtmlAssetUrls(announcement.body)"></p>
               <!-- Info Box -->
               <div v-if="announcement.infoBox" class="mt-6 p-4 bg-white/5 border-l-4 border-accent rounded-r-lg">
                 <div class="flex items-start gap-3">
                   <span class="material-symbols-outlined text-accent mt-0.5">{{ announcement.infoBox.icon }}</span>
                   <div>
                     <p class="text-white font-medium">{{ announcement.infoBox.title }}</p>
-                    <p class="text-slate-400 text-sm" v-html="announcement.infoBox.description"></p>
+                    <p class="text-slate-400 text-sm" v-html="fixHtmlAssetUrls(announcement.infoBox.description)"></p>
                   </div>
                 </div>
               </div>
@@ -105,6 +105,7 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { fixHtmlAssetUrls } from '../../utils/asset'
 
 const router = useRouter()
 

@@ -110,7 +110,7 @@ import { QuillEditor } from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
 import QuillResizeImage from 'quill-resize-image'
 import api from '../../../axios'
-
+import { storageUrl } from '../../../utils/asset'
 const router = useRouter()
 const route = useRoute()
 const isEdit = computed(() => !!route.params.id)
@@ -203,8 +203,8 @@ onMounted(async () => {
         body: data.body || '', speaker: data.speaker || '',
         duration: data.duration || '', status: data.status || 'Published',
       }
-      if (data.image_path) imagePreview.value = `/storage/${data.image_path}`
-      if (data.video_path) videoPreview.value = `/storage/${data.video_path}`
+      if (data.image_path) imagePreview.value = storageUrl(data.image_path)
+      if (data.video_path) videoPreview.value = storageUrl(data.video_path)
     } catch { formError.value = 'Gagal memuat data.' }
     pageLoading.value = false
   }

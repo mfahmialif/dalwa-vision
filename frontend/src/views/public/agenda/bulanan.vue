@@ -223,6 +223,7 @@
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import api from '../../../axios'
+import { storageUrl } from '../../../utils/asset'
 
 const router = useRouter()
 function goBack() { router.push({ name: 'Landing' }) }
@@ -367,8 +368,8 @@ function transformItem(item) {
     ...item,
     time: item.time?.substring(0, 5),
     description: item.body,
-    image: item.image_path ? `/storage/${item.image_path}` : '/img/default-agenda.png',
-    videoUrl: item.video_path ? `/storage/${item.video_path}` : null,
+    image: item.image_path ? storageUrl(item.image_path) : '/img/default-agenda.png',
+    videoUrl: item.video_path ? storageUrl(item.video_path) : null,
     speaker: item.teacher,
     date: dateObj.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }),
   }

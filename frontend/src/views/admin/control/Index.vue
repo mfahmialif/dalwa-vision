@@ -331,7 +331,7 @@
                   </span>
                 </div>
                 <h4 class="font-bold text-sm truncate" style="color: var(--text-heading)">{{ b.title }}</h4>
-                <p class="text-xs mt-1 line-clamp-2" style="color: var(--text-muted)" v-html="b.message"></p>
+                <p class="text-xs mt-1 line-clamp-2" style="color: var(--text-muted)" v-html="fixHtmlAssetUrls(b.message)"></p>
                 <p class="text-[10px] mt-2" style="color: var(--text-muted)">oleh {{ b.created_by }} · {{ formatBannerTime(b.created_at) }}</p>
               </div>
               <div class="flex gap-1 shrink-0">
@@ -405,6 +405,7 @@
 <script setup>
 import { ref, reactive, computed, onMounted } from 'vue'
 import api from '../../../axios'
+import { fixHtmlAssetUrls } from '../../../utils/asset'
 import VueMultiselect from 'vue-multiselect'
 import 'vue-multiselect/dist/vue-multiselect.css'
 import { QuillEditor } from '@vueup/vue-quill'

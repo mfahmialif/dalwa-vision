@@ -112,7 +112,7 @@
 
         <!-- Body -->
         <div class="text-slate-200 text-lg leading-relaxed space-y-4 border-l-4 border-accent/40 pl-6">
-          <div v-if="detailItem.body" class="prose prose-invert prose-lg max-w-none" v-html="detailItem.body"></div>
+          <div v-if="detailItem.body" class="prose prose-invert prose-lg max-w-none" v-html="fixHtmlAssetUrls(detailItem.body)"></div>
           <p v-else-if="detailItem.description">{{ detailItem.description }}</p>
         </div>
 
@@ -134,6 +134,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import api from '../../axios'
+import { storageUrl, fixHtmlAssetUrls } from '../../utils/asset'
 import DetailNews from '../../components/DetailNews.vue'
 import DetailImage from '../../components/DetailImage.vue'
 import DetailVideo from '../../components/DetailVideo.vue'
@@ -218,8 +219,8 @@ async function fetchGroupSiblings(currentItem, type) {
 
 // ── Transform raw API data to detail component format ──
 function transformItem(raw, type) {
-  const image = raw.image_path ? `/storage/${raw.image_path}` : '/img/default-agenda.png'
-  const videoSrc = raw.video_path ? `/storage/${raw.video_path}` : null
+  const image = raw.image_path ? storageUrl(raw.image_path) : '/img/default-agenda.png'
+  const videoSrc = raw.video_path ? storageUrl(raw.video_path) : null
 
   // Determine display mode
   if (type === 'announcement') {

@@ -36,7 +36,7 @@
       <div class="relative z-10 flex-1 overflow-y-auto no-scrollbar px-12 py-8">
         <div class="max-w-none text-white/90 leading-relaxed text-xl">
           <!-- Rich HTML body from TinyMCE -->
-          <div v-if="typeof item.body === 'string'" class="prose prose-invert prose-lg max-w-none" v-html="item.body"></div>
+          <div v-if="typeof item.body === 'string'" class="prose prose-invert prose-lg max-w-none" v-html="fixHtmlAssetUrls(item.body)"></div>
           <!-- Legacy: array of paragraphs -->
           <template v-else-if="Array.isArray(item.body)">
             <p v-for="(paragraph, i) in item.body" :key="i"
@@ -46,7 +46,7 @@
             </p>
           </template>
           <!-- Fallback: description -->
-          <div v-else-if="item.description" class="prose prose-invert prose-lg max-w-none" v-html="item.description"></div>
+          <div v-else-if="item.description" class="prose prose-invert prose-lg max-w-none" v-html="fixHtmlAssetUrls(item.description)"></div>
           <!-- Blockquote -->
           <div v-if="item.quote" class="my-8 p-6 bg-accent/10 border-l-4 border-accent rounded-r-lg">
             <p class="italic text-accent text-xl font-medium">"{{ item.quote.text }}"</p>
@@ -70,6 +70,7 @@
 </template>
 
 <script setup>
+import { fixHtmlAssetUrls } from '../utils/asset'
 defineProps({
   item: {
     type: Object,

@@ -178,6 +178,7 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import api from '../../axios'
+import { storageUrl } from '../../utils/asset'
 
 const router = useRouter()
 
@@ -252,7 +253,7 @@ const pageNumbers = computed(() => {
 })
 
 function getImageUrl(item) {
-  if (item.image_path) return `/storage/${item.image_path}`
+  if (item.image_path) return storageUrl(item.image_path)
   return '/img/default-agenda.png'
 }
 

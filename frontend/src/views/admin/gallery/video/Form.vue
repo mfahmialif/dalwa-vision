@@ -90,6 +90,7 @@ import { useRouter, useRoute } from 'vue-router'
 import VueMultiselect from 'vue-multiselect'
 import 'vue-multiselect/dist/vue-multiselect.css'
 import { useGalleryStore } from '../../../../stores/gallery'
+import { storageUrl } from '../../../../utils/asset'
 
 const router = useRouter(); const route = useRoute(); const galleryStore = useGalleryStore()
 const isEdit = computed(() => !!route.params.id)
@@ -110,8 +111,8 @@ onMounted(async () => {
     try {
       const data = await galleryStore.fetchGallery(route.params.id)
       form.value = { title: data.title, category: data.category, description: data.description || '', status: data.status, duration: data.duration }
-      if (data.image_path) imagePreview.value = `/storage/${data.image_path}`
-      if (data.video_path) videoPreview.value = `/storage/${data.video_path}`
+      if (data.image_path) imagePreview.value = storageUrl(data.image_path)
+      if (data.video_path) videoPreview.value = storageUrl(data.video_path)
     } catch { formError.value = 'Gagal memuat data.' }
   }
 })

@@ -125,7 +125,7 @@ import { QuillEditor } from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
 import QuillResizeImage from 'quill-resize-image'
 import api from '../../../../axios'
-
+import { storageUrl } from '../../../../utils/asset'
 const quillRef = ref(null)
 const quillToolbar = [
   [{ header: [1, 2, 3, false] }], ['bold', 'italic', 'underline', 'strike'],
@@ -226,8 +226,8 @@ onMounted(async () => {
     try {
       const data = await monthlyStore.fetchMonthly(route.params.id)
       form.value = { title: data.title, date: data.date?.substring(0, 10) || '', time: data.time?.substring(0, 5) || '', location: data.location || '', teacher: data.teacher || '', icon: data.icon || 'event', category: data.category, body: data.body || '', status: data.status }
-      if (data.image_path) imagePreview.value = `/storage/${data.image_path}`
-      if (data.video_path) videoPreview.value = `/storage/${data.video_path}`
+      if (data.image_path) imagePreview.value = storageUrl(data.image_path)
+      if (data.video_path) videoPreview.value = storageUrl(data.video_path)
     } catch { formError.value = 'Gagal memuat data.' }
   }
 })

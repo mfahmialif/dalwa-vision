@@ -60,7 +60,7 @@
                 {{ globalBanner.title }}
               </h1>
             </div>
-            <div class="banner-content text-lg text-slate-300 leading-relaxed" v-html="globalBanner.message"></div>
+            <div class="banner-content text-lg text-slate-300 leading-relaxed" v-html="fixHtmlAssetUrls(globalBanner.message)"></div>
           </div>
 
           <!-- Footer -->
@@ -110,6 +110,7 @@ import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import api from './axios'
 import echo from './echo'
+import { fixHtmlAssetUrls } from './utils/asset'
 
 const router = useRouter()
 const route = useRoute()

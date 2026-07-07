@@ -240,6 +240,7 @@
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import api from '../../../axios'
+import { storageUrl } from '../../../utils/asset'
 
 const router = useRouter()
 
@@ -309,7 +310,7 @@ async function loadAgendas() {
       const isPast = itemMinutes < currentMinutes - 30
       const isActive = !isPast && itemMinutes <= currentMinutes + 30 && itemMinutes >= currentMinutes - 30
 
-      const imgPath = item.image_path ? `/storage/${item.image_path}` : '/img/default-agenda.png'
+      const imgPath = item.image_path ? storageUrl(item.image_path) : '/img/default-agenda.png'
 
       return {
         id: item.id,
@@ -328,7 +329,7 @@ async function loadAgendas() {
         body: item.body || '',
         speaker: item.teacher || '',
         videoTag: item.category === 'Video' ? 'Video' : 'Kajian',
-        videoSrc: item.video_path ? `/storage/${item.video_path}` : null,
+        videoSrc: item.video_path ? storageUrl(item.video_path) : null,
         duration: 3600,
         date: new Date().toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }),
       }

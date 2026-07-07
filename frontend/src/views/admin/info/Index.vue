@@ -66,7 +66,7 @@
               <td class="px-4 py-4 text-sm font-mono" style="color: var(--text-muted)">{{ (currentPage - 1) * perPage + idx + 1 }}</td>
               <td class="px-4 py-4">
                 <div class="w-16 h-10 rounded-lg overflow-hidden bg-cover bg-center border"
-                     :style="{ backgroundImage: item.image_path ? `url('/storage/${item.image_path}')` : `url('/img/default-news.png')`, borderColor: 'var(--border)' }">
+                     :style="{ backgroundImage: item.image_path ? `url('${storageUrl(item.image_path)}')` : `url('/img/default-news.png')`, borderColor: 'var(--border)' }">
                   <div v-if="item.category === 'Video'" class="w-full h-full flex items-center justify-center bg-black/40">
                     <span class="material-symbols-outlined text-white text-[18px]">play_arrow</span>
                   </div>
@@ -130,6 +130,7 @@
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
 import api from '../../../axios'
+import { storageUrl } from '../../../utils/asset'
 import VueMultiselect from 'vue-multiselect'
 import 'vue-multiselect/dist/vue-multiselect.css'
 
